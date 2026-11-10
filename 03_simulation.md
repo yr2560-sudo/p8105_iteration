@@ -6,6 +6,7 @@ library(tidyverse)
 
 source("source/sim_mean_sd.R")
 source("source/sim_slr.R")
+source("source/birthday_repeated.R")
 
 set.seed(1236)
 ```
@@ -192,3 +193,60 @@ slr_result_df |>
 ``` r
 # It shows that they are slope and intercept are negatively correlated (not really surprsied thing)
 ```
+
+## Birthday problem
+
+``` r
+# 5 ppl in the room and prob they have the same birthday
+birthdays = sample(1:365, size = 5, replace = TRUE)
+
+repeated_birthdays = length(unique(birthdays)) <5
+repeated_birthdays
+```
+
+    ## [1] FALSE
+
+turn this in to a function
+
+``` r
+birthday_repeated(147)
+```
+
+    ## [1] TRUE
+
+run it a bunch but good
+
+``` r
+birthday_results_df = 
+  tibble(
+    number_of_people = rep(5,10)
+  ) |> 
+  mutate(
+    repeated = map_lgl(number_of_people, birthday_repeated)
+  )
+
+#birthday_results_df = 
+#  expand_grid(
+#    number_of_people = 5:50,
+#    iter = 1:1000
+#  ) |> 
+#  mutate(
+#    repeated = map_lgl(number_of_people, birthday_repeated)
+#  )
+```
+
+look at the results
+
+``` r
+birthday_results_df |> 
+  group_by(number_of_people) |> 
+  summarize(prob_of_repeat = mean(repeated)) |> 
+  ggplot(aes(x = number_of_people, y = prob_of_repeat)) +
+  geom_point() +
+  geom_line()
+```
+
+    ## `geom_line()`: Each group consists of only one observation.
+    ## ℹ Do you need to adjust the group aesthetic?
+
+<img src="03_simulation_files/figure-gfm/unnamed-chunk-18-1.png" alt="" width="90%" />
