@@ -25,3 +25,9 @@ sim_mean_sd = function(n_obs, mu = 12, sigma = 3) {
   return(return_df)
   
 }
+
+# Simulation in class
+# sim_df = 
+#  tibble(
+#    x = rbnorm(n = n_obs, size = 1, prob = 0.85)
+#  )

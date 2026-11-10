@@ -32,4 +32,36 @@ source("source/sim_mean_sd.R")
 set.seed(1236)
 ```
 
+## Mean and SD
+
+Can we check CLT using simulation
+```{r}
+sim_mean_sd(n_obs = 30)
+```
+
+Keep track of results
+```{r}
+output = vector("list", length = 1000)
+
+for (i in 1:1000) {
+  output[[i]] = sim_mean_sd(n_obs = 30)
+}
+```
+
+Inspect results
+```{r}
+output |> 
+  bind_rows() |> # stack up rows
+  summarize(
+    emp_m = mean(mean),
+    emp_se = sd(mean)
+  )
+```
+
+```{r}
+output |> 
+  bind_rows() |> 
+  ggplot(aes(x = mean)) +
+  geom_density()
+```
 
